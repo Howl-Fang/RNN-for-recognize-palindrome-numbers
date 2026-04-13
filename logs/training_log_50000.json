@@ -1,0 +1,16 @@
+{
+  "dataset_size": 50000,
+  "final_train_loss": 0.05557291437839786,
+  "final_val_loss": 0.04792939062596014,
+  "final_train_accuracy": 0.9835426281707274,
+  "final_val_accuracy": 0.9855466514024042,
+  "epochs_trained": 30,
+  "hyperparameters": {
+    "embedding_dim": 16,
+    "hidden_dim": 32,
+    "n_layers": 2,
+    "dropout": 0.3,
+    "learning_rate": 0.001,
+    "batch_size": 32
+  }
+}
