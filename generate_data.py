@@ -87,6 +87,78 @@ def generate_palindrome_dataset(n_samples: int, max_digits: int = 7, random_seed
     
     return X, y
 
+def generate_palindrome_dataset_log_uniform(n_samples: int, min_digits: int = 1, max_digits: int = 7, random_seed: int = 42) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Generate dataset with uniform distribution over digit counts (log-uniform by number magnitude).
+    
+    Args:
+        n_samples: Total number of samples
+        min_digits: Minimum number of digits (default 1)
+        max_digits: Maximum number of digits (default 7)
+        random_seed: Random seed for reproducibility
+        
+    Returns:
+        X: Array of numbers with uniform digit-length distribution
+        y: Array of labels (1 for palindrome, 0 otherwise)
+    """
+    np.random.seed(random_seed)
+    
+    X_all = []
+    y_all = []
+    
+    samples_per_digit = n_samples // (max_digits - min_digits + 1)
+    
+    for num_digits in range(min_digits, max_digits + 1):
+        min_val = 10 ** (num_digits - 1) if num_digits > 1 else 0
+        max_val = 10 ** num_digits - 1
+        
+        X_palindrome = []
+        X_non_palindrome = []
+        
+        samples_needed_per_class = samples_per_digit // 2
+        
+        # Generate palindromes for this digit count
+        attempts = 0
+        max_attempts = samples_needed_per_class * 10
+        while len(X_palindrome) < samples_needed_per_class and attempts < max_attempts:
+            half_len = (num_digits + 1) // 2
+            half_digits = [np.random.randint(0, 10) for _ in range(half_len)]
+            
+            if num_digits % 2 == 0:
+                palindrome_digits = half_digits + half_digits[::-1]
+            else:
+                palindrome_digits = half_digits + half_digits[-2::-1]
+            
+            num = int(''.join(map(str, palindrome_digits)))
+            if min_val <= num <= max_val and num not in X_palindrome:
+                X_palindrome.append(num)
+            attempts += 1
+        
+        # Generate non-palindromes for this digit count
+        attempts = 0
+        max_attempts = samples_needed_per_class * 100
+        while len(X_non_palindrome) < samples_needed_per_class and attempts < max_attempts:
+            num = np.random.randint(min_val, max_val + 1)
+            if not is_palindrome(num) and num not in X_non_palindrome:
+                X_non_palindrome.append(num)
+            attempts += 1
+        
+        # Add to overall dataset
+        X_all.extend(X_palindrome[:samples_needed_per_class])
+        X_all.extend(X_non_palindrome[:samples_needed_per_class])
+        y_all.extend([1] * len(X_palindrome[:samples_needed_per_class]))
+        y_all.extend([0] * len(X_non_palindrome[:samples_needed_per_class]))
+    
+    X = np.array(X_all)
+    y = np.array(y_all)
+    
+    # Shuffle
+    indices = np.random.permutation(len(X))
+    X = X[indices]
+    y = y[indices]
+    
+    return X, y
+
 def save_dataset(X: np.ndarray, y: np.ndarray, filepath: str) -> None:
     """Save dataset to CSV file."""
     df = pd.DataFrame({'number': X, 'label': y})

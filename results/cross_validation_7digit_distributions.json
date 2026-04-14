@@ -1,0 +1,44 @@
+{
+  "loguniform_200_on_uniform": {
+    "trained_on": "log-uniform 7-digit",
+    "tested_on": "uniform 7-digit",
+    "accuracy": 0.477,
+    "train_acc": 0.6285714285714286,
+    "difference": 0.15157142857142858
+  },
+  "loguniform_1000_on_uniform": {
+    "trained_on": "log-uniform 7-digit",
+    "tested_on": "uniform 7-digit",
+    "accuracy": 0.508,
+    "train_acc": 0.53125,
+    "difference": 0.023249999999999993
+  },
+  "loguniform_50000_on_uniform": {
+    "trained_on": "log-uniform 7-digit",
+    "tested_on": "uniform 7-digit",
+    "accuracy": 0.882,
+    "train_acc": 0.948180284405881,
+    "difference": 0.06618028440588097
+  },
+  "uniform_200_on_loguniform": {
+    "trained_on": "uniform 7-digit",
+    "tested_on": "log-uniform 7-digit",
+    "accuracy": 0.495,
+    "train_acc": 0,
+    "difference": -0.495
+  },
+  "uniform_1000_on_loguniform": {
+    "trained_on": "uniform 7-digit",
+    "tested_on": "log-uniform 7-digit",
+    "accuracy": 0.54625,
+    "train_acc": 0,
+    "difference": -0.54625
+  },
+  "uniform_50000_on_loguniform": {
+    "trained_on": "uniform 7-digit",
+    "tested_on": "log-uniform 7-digit",
+    "accuracy": 0.62375,
+    "train_acc": 0,
+    "difference": -0.62375
+  }
+}
