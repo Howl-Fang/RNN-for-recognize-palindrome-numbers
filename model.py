@@ -90,3 +90,7 @@ def create_data_loaders(X_train: np.ndarray, y_train: np.ndarray,
 def get_device():
     """Get device (GPU if available, else CPU)."""
     return torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+model = PalindromeRNN()
+print("Default model architecture:")
+print(model)
