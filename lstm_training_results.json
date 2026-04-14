@@ -1,0 +1,32 @@
+[
+  {
+    "num_samples": 200,
+    "model_name": "lstm_model_200",
+    "model_type": "LSTM",
+    "final_train_loss": 0.5202450037002564,
+    "final_val_loss": 0.6788503527641296,
+    "val_accuracy": 0.625,
+    "model_path": "models/lstm_model_200.pth",
+    "plot_path": "plots/lstm_model_200_loss.png"
+  },
+  {
+    "num_samples": 1000,
+    "model_name": "lstm_model_1000",
+    "model_type": "LSTM",
+    "final_train_loss": 0.2372808438539505,
+    "final_val_loss": 0.39501891817365375,
+    "val_accuracy": 0.825,
+    "model_path": "models/lstm_model_1000.pth",
+    "plot_path": "plots/lstm_model_1000_loss.png"
+  },
+  {
+    "num_samples": 50000,
+    "model_name": "lstm_model_50000",
+    "model_type": "LSTM",
+    "final_train_loss": 0.05450532987490296,
+    "final_val_loss": 0.05582168233839754,
+    "val_accuracy": 0.987,
+    "model_path": "models/lstm_model_50000.pth",
+    "plot_path": "plots/lstm_model_50000_loss.png"
+  }
+]
