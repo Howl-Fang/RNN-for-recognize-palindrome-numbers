@@ -1,8 +1,4 @@
 """
-Student Name: Placeholder Name
-Student ID: 0000000
-Student Email: student@example.com
-
 RNN model with embedding layer for palindrome number classification.
 Based on Tutorial 6 architecture.
 """

@@ -1,8 +1,4 @@
 """
-Student Name: Placeholder Name
-Student ID: 0000000
-Student Email: student@example.com
-
 Evaluation script for testing trained models on test.csv
 """
 
@@ -122,10 +118,10 @@ def main():
         print()
     
     # Save evaluation results
-    os.makedirs('results', exist_ok=True)
-    with open('results/evaluation_results.json', 'w') as f:
-        json.dump(all_results, f, indent=2)
-    print(f"Saved evaluation results to results/evaluation_results.json")
+    # os.makedirs('results', exist_ok=True)
+    # with open('results/evaluation_results.json', 'w') as f:
+    #     json.dump(all_results, f, indent=2)
+    # print(f"Saved evaluation results to results/evaluation_results.json")
     
     return all_results
 

@@ -1,8 +1,4 @@
 """
-Student Name: Placeholder Name
-Student ID: 0000000
-Student Email: student@example.com
-
 Dataset generation for palindrome number classification task.
 Generates balanced training datasets with specified sizes.
 """
@@ -10,6 +6,7 @@ Generates balanced training datasets with specified sizes.
 import numpy as np
 import pandas as pd
 from typing import Tuple, List
+from sys import argv
 
 def is_palindrome(n: int) -> bool:
     """Check if a number is a palindrome."""
@@ -51,7 +48,8 @@ def generate_palindrome_dataset(n_samples: int, max_digits: int = 7, random_seed
             palindrome_digits = half_digits + half_digits[-2::-1]
         
         num = int(''.join(map(str, palindrome_digits)))
-        if num <= max_val and num not in X_palindrome:
+        if num <= max_val:
+        # if num <= max_val and num not in X_palindrome:
             X_palindrome.append(num)
             if len(X_palindrome) >= n_per_class:
                 break
@@ -167,7 +165,11 @@ def main():
     sizes = [200, 1000, 50000]
     
     for size in sizes:
-        X, y = generate_palindrome_dataset(size)
+        if len(argv) > 1 and argv[1] == 'log':
+            print(f"Generating log-uniform dataset of size {size}...")
+            X, y = generate_palindrome_dataset_log_uniform(size)
+        else:
+            X, y = generate_palindrome_dataset(size)
         filepath = f'train_{size}.csv'
         save_dataset(X, y, filepath)
         
