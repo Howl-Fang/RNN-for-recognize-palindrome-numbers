@@ -1,9 +1,9 @@
 {
   "dataset_size": 50000,
-  "final_train_loss": 0.021944833009876312,
-  "final_val_loss": 0.030081073366910422,
-  "final_train_accuracy": 0.9941,
-  "final_val_accuracy": 0.9932,
+  "final_train_loss": 0.028764694850565865,
+  "final_val_loss": 0.04372938437991368,
+  "final_train_accuracy": 0.991925,
+  "final_val_accuracy": 0.9887,
   "epochs_trained": 25,
   "hyperparameters": {
     "embedding_dim": 16,

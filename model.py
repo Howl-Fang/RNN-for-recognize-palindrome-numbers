@@ -42,7 +42,8 @@ class PalindromeRNN(nn.Module):
     """Vanilla RNN with embedding layer for palindrome classification."""
     
     def __init__(self, vocab_size: int = 10, embedding_dim: int = 16, hidden_dim: int = 32, 
-                 output_dim: int = 1, n_layers: int = 2, dropout: float = 0.3, enableLSTM: bool = True):
+                 output_dim: int = 1, n_layers: int = 2, dropout: float = 0.3, enableLSTM: bool = True,
+                 hyperparameters: dict = None):
         """
         Args:
             vocab_size: Size of vocabulary (digits 0-9)
@@ -51,12 +52,29 @@ class PalindromeRNN(nn.Module):
             output_dim: Output dimension (1 for binary classification)
             n_layers: Number of RNN layers
             dropout: Dropout rate
+            hyperparameters: dictionary to load once at a time, overwrite other hyperparameters if provided
         """
         super().__init__()
-        self.enableLSTM = enableLSTM
+        if hyperparameters is not None:
+            vocab_size = hyperparameters.get('vocab_size', vocab_size)
+            embedding_dim = hyperparameters.get('embedding_dim', embedding_dim)
+            hidden_dim = hyperparameters.get('hidden_dim', hidden_dim)
+            output_dim = hyperparameters.get('output_dim', output_dim)
+            n_layers = hyperparameters.get('n_layers', n_layers)
+            dropout = hyperparameters.get('dropout', dropout)
+            enableLSTM = hyperparameters.get('enableLSTM', enableLSTM)
+        self.hyperparameters = {
+            'vocab_size': vocab_size,
+            'embedding_dim': embedding_dim,
+            'hidden_dim': hidden_dim,
+            'output_dim': output_dim,
+            'n_layers': n_layers,
+            'dropout': dropout,
+            'enableLSTM': enableLSTM
+        }
         
         self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=0)
-        if self.enableLSTM:
+        if enableLSTM:
             self.rnn = nn.LSTM(embedding_dim, hidden_dim, num_layers=n_layers, 
                               dropout=dropout if n_layers > 1 else 0, batch_first=True)
         else:
@@ -74,7 +92,7 @@ class PalindromeRNN(nn.Module):
             Predictions of shape [batch_size, 1]
         """
         embedded = self.embedding(text)  # [batch_size, seq_length, embedding_dim]
-        if self.enableLSTM:
+        if self.hyperparameters['enableLSTM']:
             output, (hidden, cell) = self.rnn(embedded)  # output: [batch_size, seq_length, hidden_dim]
         else:
             output, hidden = self.rnn(embedded)  # output: [batch_size, seq_length, hidden_dim]
@@ -100,6 +118,6 @@ def get_device():
     """Get device (GPU if available, else CPU)."""
     return torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-model = PalindromeRNN()
+model_default = PalindromeRNN()
 print("Default model architecture:")
-print(model)
+print(model_default)

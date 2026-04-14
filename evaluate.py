@@ -2,6 +2,7 @@
 Evaluation script for testing trained models on test.csv
 """
 
+from sympy import hyper
 import torch
 import torch.nn as nn
 import numpy as np
@@ -12,12 +13,17 @@ from sys import argv
 import json
 import os
 
-from model import PalindromeRNN, PalindromeDataset, get_device
+from model import *
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 def load_model(model_path: str, device: torch.device) -> nn.Module:
     """Load a trained model."""
-    model = PalindromeRNN(vocab_size=10, embedding_dim=16, hidden_dim=32, n_layers=2, dropout=0.3)
+    # model = PalindromeRNN(vocab_size=10, embedding_dim=16, hidden_dim=32, n_layers=2, dropout=0.3)
+    hyperparameters_path = 'logs/hyperparameters.json'
+    # if Path(hyperparameters_path).exists():
+    with open(hyperparameters_path, 'r') as f:
+        hyperparameters = json.load(f)
+    model = PalindromeRNN(hyperparameters = hyperparameters)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.to(device)
     model.eval()

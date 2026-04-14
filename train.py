@@ -176,7 +176,7 @@ def train_model(dataset_size: int, epochs: int = 20) -> Dict:
     
     # Initialize model
     device = get_device()
-    model = PalindromeRNN(vocab_size=10, embedding_dim=16, hidden_dim=32, n_layers=2, dropout=0.3)
+    model = PalindromeRNN()
     
     # Train
     trainer = Trainer(model, device, learning_rate=0.001)
@@ -204,14 +204,15 @@ def train_model(dataset_size: int, epochs: int = 20) -> Dict:
             'final_train_accuracy': float(trainer.train_accuracies[-1]),
             'final_val_accuracy': float(trainer.val_accuracies[-1]),
             'epochs_trained': len(trainer.train_losses),
-            'hyperparameters': {
-                'embedding_dim': 16,
-                'hidden_dim': 32,
-                'n_layers': 2,
-                'dropout': 0.3,
-                'learning_rate': 0.001,
-                'batch_size': 32
-            }
+            # 'hyperparameters': {
+            #     'embedding_dim': 16,
+            #     'hidden_dim': 32,
+            #     'n_layers': 2,
+            #     'dropout': 0.3,
+            #     'learning_rate': 0.001,
+            #     'batch_size': 32
+            # }
+            'hyperparameters': model.hyperparameters
         }, f, indent=2)
     print(f"Saved training log to {log_path}")
     
@@ -231,6 +232,13 @@ def main():
     for size in dataset_sizes:
         result = train_model(size, epochs=30)
         results.append(result)
+
+    hyperparameters_path = 'logs/hyperparameters.json'
+    with open(hyperparameters_path, 'w') as f:
+        json.dump({
+            result[0]['model'].hyperparameters
+        }, f, indent=2)
+    print(f"Saved hyperparameters to {hyperparameters_path}")
     
     print(f"\n{'='*60}")
     print("All models trained successfully!")

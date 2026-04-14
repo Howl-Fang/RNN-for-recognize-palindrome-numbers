@@ -1,16 +1,17 @@
 {
   "dataset_size": 200,
-  "final_train_loss": 0.6909677386283875,
-  "final_val_loss": 0.703758716583252,
+  "final_train_loss": 0.6906076908111572,
+  "final_val_loss": 0.7020751237869263,
   "final_train_accuracy": 0.525,
   "final_val_accuracy": 0.4,
   "epochs_trained": 6,
   "hyperparameters": {
+    "vocab_size": 10,
     "embedding_dim": 16,
     "hidden_dim": 32,
+    "output_dim": 1,
     "n_layers": 2,
     "dropout": 0.3,
-    "learning_rate": 0.001,
-    "batch_size": 32
+    "enableLSTM": true
   }
 }
