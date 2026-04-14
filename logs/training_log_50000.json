@@ -1,18 +1,10 @@
 {
   "dataset_size": 50000,
-<<<<<<< HEAD
-  "final_train_loss": 0.014081409597257153,
-  "final_val_loss": 0.025075603802312767,
-  "final_train_accuracy": 0.996,
-  "final_val_accuracy": 0.994,
-  "epochs_trained": 26,
-=======
-  "final_train_loss": 0.022312199833686465,
-  "final_val_loss": 0.028829070635771486,
-  "final_train_accuracy": 0.993375,
-  "final_val_accuracy": 0.9927,
-  "epochs_trained": 27,
->>>>>>> 645ecfbff546e0db3b4b8786397b062a3096f6a4
+  "final_train_loss": 0.018421405564667658,
+  "final_val_loss": 0.02422155910089743,
+  "final_train_accuracy": 0.99445,
+  "final_val_accuracy": 0.9941,
+  "epochs_trained": 29,
   "hyperparameters": {
     "vocab_size": 10,
     "embedding_dim": 16,

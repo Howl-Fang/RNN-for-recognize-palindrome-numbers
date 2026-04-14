@@ -85,7 +85,7 @@ def generate_palindrome_dataset(n_samples: int, max_digits: int = 7, random_seed
     
     return X, y
 
-def generate_palindrome_dataset_log_uniform(n_samples: int, max_digits: int = 12, random_seed: int = 42) -> Tuple[np.ndarray, np.ndarray]:
+def generate_palindrome_dataset_log_uniform(n_samples: int, max_digits: int = 7, random_seed: int = 42) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate balanced dataset with uniform logarithmic distribution.
     This ensures uniform distribution of digit counts across the dataset.
