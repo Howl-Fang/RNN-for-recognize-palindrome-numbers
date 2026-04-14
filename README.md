@@ -1,33 +1,70 @@
-# Palindrome RNN Classification Project
+# Palindrome RNN Classification Project - Multi-Branch Experiment
 
 ## Overview
 This project implements a vanilla RNN with an embedding layer to classify 7-digit numbers as palindromes or non-palindromes. Three models are trained on datasets of different sizes: 200, 1000, and 50000 examples.
 
+## Branches
+
+This project contains multiple experimental branches:
+
+- **master** (current): Original RNN implementation (7-digit balanced distribution)
+- **log-uniform-7digit**: RNN trained on 7-digit with log-uniform distribution (variable digit lengths)
+- **lstm-models**: Extended implementation with LSTM architecture and dual-domain evaluation
+- Other experimental branches may be added
+
+### Comparing Branches
+
+| Branch | Focus | Training Data | Key Result |
+|--------|-------|---------------|-----------|
+| master | Baseline RNN | 7-digit balanced | 99% on matched, 54% on cross-domain |
+| log-uniform-7digit | Variable-length training | 7-digit log-uniform (1-7 digits) | 94.5% on matched, 56% on cross-domain |
+| lstm-models | Better generalization | Both 7-digit and 12-digit | LSTM improves cross-domain slightly |
+
+**Finding**: Variable-length training (log-uniform) helps generalization but doesn't solve magnitude range overfitting.
+
 ## Project Structure
 ```
 .
-├── generate_data.py      # Dataset generation script
-├── model.py              # RNN model architecture
-├── train.py              # Training script
-├── evaluate.py           # Evaluation script
-├── test.csv              # Test dataset
-├── requirements.txt      # Python dependencies
-├── train_*.csv           # Generated training datasets
-├── models/               # Trained model weights
+├── Documentation
+├── README.md                                # This file
+├── LOG_UNIFORM_BRANCH_README.md            # Log-uniform branch documentation
+│
+├── Code Files
+├── generate_data.py                        # Dataset generation script
+├── model.py                                # RNN model architecture
+├── train.py                                # RNN training script (master)
+├── train_loguniform_7digit.py             # Log-uniform training script
+├── evaluate.py                             # Evaluation script
+│
+├── Data
+├── test.csv                                # Test dataset (7-digit)
+├── train_*.csv                             # Generated training datasets
+├── test_sets/
+│   └── test_12digit_loguniform_7digit_models.csv
+│
+├── Models (Master branch)
+├── models/
 │   ├── model_200.pt
 │   ├── model_1000.pt
 │   └── model_50000.pt
-├── plots/                # Training loss and accuracy plots
-│   ├── loss_accuracy_200.png
-│   ├── loss_accuracy_1000.png
-│   └── loss_accuracy_50000.png
-├── logs/                 # Training logs
-│   ├── training_log_200.json
-│   ├── training_log_1000.json
-│   └── training_log_50000.json
-├── results/              # Evaluation results
-│   └── evaluation_results.json
-└── README.md             # This file
+│
+├── Models (Log-uniform branch)
+├── models/
+│   ├── model_loguniform_7digit_200.pt
+│   ├── model_loguniform_7digit_1000.pt
+│   └── model_loguniform_7digit_50000.pt
+│
+├── Training Outputs
+├── plots/                                  # Training plots (PNG)
+├── logs/                                   # Training logs (JSON)
+├── results/                                # Evaluation results (JSON)
+│   ├── evaluation_results.json
+│   └── cross_validation_loguniform_7digit.json
+│
+├── Configuration
+├── requirements.txt                        # Python dependencies
+├── .gitignore                             # Git ignore rules
+└── venv/                                  # Virtual environment
 ```
 
 ## Hyperparameters
@@ -179,7 +216,52 @@ Examples: 121, 1331, 12321, 44444, 98789
 - Early stopping if validation loss doesn't improve for 5 epochs
 - Batch size: 32
 
-## Conclusion
+## Experimental Branch: Log-Uniform 7-Digit Training
+
+### What is the Log-Uniform Branch?
+
+The `log-uniform-7digit` branch explores an alternative training distribution:
+- Instead of fixed 7-digit numbers, training data includes variable digit lengths (1-7)
+- Digit counts are uniformly represented
+- Tests whether variable-length training improves cross-domain generalization
+
+### Motivation
+
+**Question**: Does training on variable-length numbers help models generalize better to unseen digit ranges?
+
+**Hypothesis**: Models trained on diverse digit lengths should learn less magnitude-specific patterns and generalize better.
+
+### Results Comparison
+
+| Metric | Master (Fixed 7-digit) | Log-Uniform (1-7 digit) | Finding |
+|--------|------------------------|-------------------------|---------|
+| Model 50K on 7-digit | 99% | 94.5% | Log-uniform is harder to learn |
+| Model 50K on 12-digit | 54% | 56% | **+2% improvement!** |
+| Degradation | -45% | -38% | **Better robustness** |
+| Model 200 generalization | Worse (-5%) | **Better (+0.2%)** | Small underfitted models help |
+
+### Key Finding
+
+**Log-uniform training improves cross-domain generalization** by ~4% for the largest model, suggesting that training data diversity helps prevent magnitude-specific overfitting.
+
+### How to Run Log-Uniform Experiment
+
+```bash
+# Switch to log-uniform branch
+git checkout log-uniform-7digit
+
+# Activate environment
+source venv/bin/activate
+
+# Run training and cross-validation
+python train_loguniform_7digit.py
+```
+
+This trains models and automatically cross-validates on 12-digit test set.
+
+### For More Details
+
+See `LOG_UNIFORM_BRANCH_README.md` for detailed analysis, results, and findings.
 
 The project successfully demonstrates RNN training for palindrome classification:
 - Larger training datasets lead to significantly better performance
