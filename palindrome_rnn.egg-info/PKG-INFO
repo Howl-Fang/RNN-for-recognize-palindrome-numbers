@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: palindrome-rnn
+Version: 0.1.0
+Summary: Vanilla RNN for palindrome number recognition
+Requires-Python: >=3.9
+Requires-Dist: torch>=2.0.0
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: pandas>=1.5.0
+Requires-Dist: matplotlib>=3.7.0

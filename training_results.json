@@ -1,0 +1,29 @@
+[
+  {
+    "num_samples": 200,
+    "model_name": "model_200",
+    "final_train_loss": 0.3048540592193604,
+    "final_val_loss": 0.5107339322566986,
+    "val_accuracy": 0.75,
+    "model_path": "models/model_200.pth",
+    "plot_path": "plots/model_200_loss.png"
+  },
+  {
+    "num_samples": 1000,
+    "model_name": "model_1000",
+    "final_train_loss": 0.3610833144187927,
+    "final_val_loss": 0.5271388632910592,
+    "val_accuracy": 0.765,
+    "model_path": "models/model_1000.pth",
+    "plot_path": "plots/model_1000_loss.png"
+  },
+  {
+    "num_samples": 50000,
+    "model_name": "model_50000",
+    "final_train_loss": 0.14017231923937798,
+    "final_val_loss": 0.15690917455064604,
+    "val_accuracy": 0.9558,
+    "model_path": "models/model_50000.pth",
+    "plot_path": "plots/model_50000_loss.png"
+  }
+]

@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+palindrome_rnn.egg-info/PKG-INFO
+palindrome_rnn.egg-info/SOURCES.txt
+palindrome_rnn.egg-info/dependency_links.txt
+palindrome_rnn.egg-info/requires.txt
+palindrome_rnn.egg-info/top_level.txt
