@@ -9,6 +9,7 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from typing import Tuple
+from sys import argv
 
 class PalindromeDataset(Dataset):
     """Custom dataset for palindrome classification."""
@@ -116,6 +117,9 @@ def create_data_loaders(X_train: np.ndarray, y_train: np.ndarray,
 
 def get_device():
     """Get device (GPU if available, else CPU)."""
+    if argv[-1] == 'dev=cpu':
+        print("Running on CPU only (dev=cpu flag detected).")
+        return torch.device('cpu')
     return torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 model_default = PalindromeRNN()

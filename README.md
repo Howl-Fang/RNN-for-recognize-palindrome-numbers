@@ -16,14 +16,17 @@ LI, Haofang
 
 [training log with 50000](logs/training_log_50000.json)
 
-## How to run test:
+## General run
 Environment build: `pip install -r requirements.txt`
+add `dev=cpu` at the end to run only on cpu
+
+### How to run test:
 Run `evaluate.py` directly, with `test.csv` lies under the same directory.
 Or run `evaluate.py <dir to csv file>`
 
-## training:
+### training:
 Run `train.py`
 
-## training data generation:
+### training data generation:
 Run `generate_data.py`
 generate log-uniform training data: Run `generate_data.py log`
