@@ -136,3 +136,6 @@ Thumbs.db
 # Project specific
 .venv
 test_predictions_*.csv
+
+# Model files (large artifacts)
+models/*.pth
