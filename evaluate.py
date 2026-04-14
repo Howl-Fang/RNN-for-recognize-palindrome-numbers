@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from typing import Tuple, List
+from sys import argv
 import json
 import os
 
@@ -71,10 +72,12 @@ def evaluate_on_test_file(model: nn.Module, test_file: str, device: torch.device
     return results
 
 def main():
-    """Evaluate all three models on test.csv"""
+    """Evaluate all three models on test.csv or custom test file"""
     
-    if not Path('test.csv').exists():
-        print("test.csv not found. Creating sample test file...")
+    test_file = argv[1] if len(argv) > 1 else 'test.csv'
+    
+    if not Path('test.csv').exists() and test_file == 'test.csv':
+        print(f"test.csv not found. Creating sample test file...")
         # Create sample test data
         sample_tests = [
             (123, 0),
@@ -91,7 +94,7 @@ def main():
     all_results = {}
     
     print(f"\n{'='*60}")
-    print("Evaluating all models on test.csv")
+    print(f"Evaluating all models on {test_file}")
     print(f"{'='*60}\n")
     
     for size in dataset_sizes:
@@ -103,7 +106,7 @@ def main():
         
         print(f"Evaluating model trained on {size} examples...")
         model = load_model(model_path, device)
-        results = evaluate_on_test_file(model, 'test.csv', device)
+        results = evaluate_on_test_file(model, test_file, device)
         
         all_results[f'model_{size}'] = results
         
