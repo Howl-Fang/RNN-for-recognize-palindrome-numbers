@@ -235,9 +235,9 @@ def main():
 
     hyperparameters_path = 'logs/hyperparameters.json'
     with open(hyperparameters_path, 'w') as f:
-        json.dump({
-            results[0]['model'].hyperparameters
-        }, f, indent=2)
+        json.dump(
+            results[0]['model'].hyperparameters,
+        f, indent=2)
     print(f"Saved hyperparameters to {hyperparameters_path}")
     
     print(f"\n{'='*60}")
