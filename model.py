@@ -42,8 +42,8 @@ class PalindromeDataset(Dataset):
 class PalindromeRNN(nn.Module):
     """Vanilla RNN with embedding layer for palindrome classification."""
     
-    def __init__(self, vocab_size: int = 10, embedding_dim: int = 16, hidden_dim: int = 32, 
-                 output_dim: int = 1, n_layers: int = 2, dropout: float = 0.3, enableLSTM: bool = True,
+    def __init__(self, vocab_size: int = 10, embedding_dim: int = 16, hidden_dim: int = 64, 
+                 output_dim: int = 1, n_layers: int = 3, dropout: float = 0.3, enableLSTM: bool = True,
                  hyperparameters: dict = None):
         """
         Args:
@@ -82,7 +82,6 @@ class PalindromeRNN(nn.Module):
             self.rnn = nn.RNN(embedding_dim, hidden_dim, num_layers=n_layers, 
                              dropout=dropout if n_layers > 1 else 0, batch_first=True)
         self.fc = nn.Linear(hidden_dim, output_dim)
-        self.sigmoid = nn.Sigmoid()
     
     def forward(self, text):
         """
@@ -90,7 +89,7 @@ class PalindromeRNN(nn.Module):
             text: Tensor of shape [batch_size, seq_length]
             
         Returns:
-            Predictions of shape [batch_size, 1]
+            Logits of shape [batch_size, 1] (before sigmoid)
         """
         embedded = self.embedding(text)  # [batch_size, seq_length, embedding_dim]
         if self.hyperparameters['enableLSTM']:
@@ -99,8 +98,7 @@ class PalindromeRNN(nn.Module):
             output, hidden = self.rnn(embedded)  # output: [batch_size, seq_length, hidden_dim]
         hidden_last = hidden[-1]  # Take last layer's hidden state: [batch_size, hidden_dim]
         logits = self.fc(hidden_last)  # [batch_size, 1]
-        predictions = self.sigmoid(logits)
-        return predictions
+        return logits
 
 def create_data_loaders(X_train: np.ndarray, y_train: np.ndarray, 
                        X_val: np.ndarray, y_val: np.ndarray,

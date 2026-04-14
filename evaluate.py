@@ -43,12 +43,14 @@ def evaluate_on_test_file(model: nn.Module, test_file: str, device: torch.device
     # Get predictions
     predictions = []
     true_labels = []
+    sigmoid = nn.Sigmoid()
     
     with torch.no_grad():
         for x, y in test_dataset:
             x = x.unsqueeze(0).to(device)
-            pred = model(x).squeeze().item()
-            predictions.append(1 if pred > 0.5 else 0)
+            logits = model(x).squeeze().item()
+            prob = sigmoid(torch.tensor(logits)).item()
+            predictions.append(1 if prob > 0.5 else 0)
             true_labels.append(y.item())
     
     predictions = np.array(predictions)

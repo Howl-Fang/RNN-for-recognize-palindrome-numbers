@@ -24,15 +24,19 @@ from model import PalindromeRNN, create_data_loaders, get_device
 class Trainer:
     """Trainer class for RNN models."""
     
-    def __init__(self, model: nn.Module, device: torch.device, learning_rate: float = 0.001):
+    def __init__(self, model: nn.Module, device: torch.device, learning_rate: float = 0.001, 
+                 pos_weight: float = 1.0):
         self.model = model.to(device)
         self.device = device
-        self.criterion = nn.BCELoss()
+        pos_weight_tensor = torch.tensor([pos_weight]).to(device)
+        self.criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight_tensor)
         self.optimizer = optim.Adam(model.parameters(), lr=learning_rate)
         self.train_losses = []
         self.val_losses = []
         self.train_accuracies = []
         self.val_accuracies = []
+        self.train_pred_dist = []
+        self.val_pred_dist = []
     
     def train_epoch(self, train_loader) -> Tuple[float, float]:
         """Train for one epoch."""
@@ -40,27 +44,35 @@ class Trainer:
         total_loss = 0.0
         correct = 0
         total = 0
+        all_pred_labels = []
         
         for batch_x, batch_y in train_loader:
             batch_x = batch_x.to(self.device)
             batch_y = batch_y.to(self.device)
             
             self.optimizer.zero_grad()
-            predictions = self.model(batch_x).squeeze()
+            logits = self.model(batch_x).squeeze()
             
-            loss = self.criterion(predictions, batch_y)
+            loss = self.criterion(logits, batch_y)
             loss.backward()
             self.optimizer.step()
             
             total_loss += loss.item()
             
-            # Calculate accuracy
-            pred_labels = (predictions > 0.5).long()
+            # Calculate accuracy - apply sigmoid to logits for threshold
+            sigmoid = torch.nn.Sigmoid()
+            probs = sigmoid(logits)
+            pred_labels = (probs > 0.5).long()
             correct += (pred_labels == batch_y.long()).sum().item()
             total += batch_y.size(0)
+            all_pred_labels.extend(pred_labels.cpu().numpy().tolist())
         
         avg_loss = total_loss / len(train_loader)
         accuracy = correct / total
+        
+        # Log prediction distribution
+        pred_dist = np.bincount(all_pred_labels)
+        self.train_pred_dist.append(pred_dist)
         
         return avg_loss, accuracy
     
@@ -70,27 +82,36 @@ class Trainer:
         total_loss = 0.0
         correct = 0
         total = 0
+        all_pred_labels = []
         
         with torch.no_grad():
             for batch_x, batch_y in val_loader:
                 batch_x = batch_x.to(self.device)
                 batch_y = batch_y.to(self.device)
                 
-                predictions = self.model(batch_x).squeeze()
-                loss = self.criterion(predictions, batch_y)
+                logits = self.model(batch_x).squeeze()
+                loss = self.criterion(logits, batch_y)
                 
                 total_loss += loss.item()
                 
-                pred_labels = (predictions > 0.5).long()
+                # Apply sigmoid to logits for threshold
+                sigmoid = torch.nn.Sigmoid()
+                probs = sigmoid(logits)
+                pred_labels = (probs > 0.5).long()
                 correct += (pred_labels == batch_y.long()).sum().item()
                 total += batch_y.size(0)
+                all_pred_labels.extend(pred_labels.cpu().numpy().tolist())
         
         avg_loss = total_loss / len(val_loader)
         accuracy = correct / total
         
+        # Log prediction distribution
+        pred_dist = np.bincount(all_pred_labels)
+        self.val_pred_dist.append(pred_dist)
+        
         return avg_loss, accuracy
     
-    def train(self, train_loader, val_loader, epochs: int = 20, patience: int = 5) -> Dict:
+    def train(self, train_loader, val_loader, epochs: int = 20, patience: int = 20) -> Dict:
         """Train the model with early stopping."""
         best_val_loss = float('inf')
         patience_counter = 0
@@ -104,8 +125,15 @@ class Trainer:
             self.train_accuracies.append(train_acc)
             self.val_accuracies.append(val_acc)
             
+            # Get prediction distribution
+            train_pred = self.train_pred_dist[-1] if self.train_pred_dist else [0, 0]
+            val_pred = self.val_pred_dist[-1] if self.val_pred_dist else [0, 0]
+            train_dist_str = f"0s={train_pred[0] if len(train_pred) > 0 else 0}, 1s={train_pred[1] if len(train_pred) > 1 else 0}"
+            val_dist_str = f"0s={val_pred[0] if len(val_pred) > 0 else 0}, 1s={val_pred[1] if len(val_pred) > 1 else 0}"
+            
             print(f"Epoch {epoch+1:2d}/{epochs} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | "
                   f"Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
+            print(f"           | Train Preds: {train_dist_str} | Val Preds: {val_dist_str}")
             
             # Early stopping
             if val_loss < best_val_loss:
@@ -171,6 +199,13 @@ def train_model(dataset_size: int, epochs: int = 20) -> Dict:
     X_train, X_val = X[:split_idx], X[split_idx:]
     y_train, y_val = y[:split_idx], y[split_idx:]
     
+    # Calculate class weights for balanced loss
+    n_pos = np.sum(y_train)
+    n_neg = len(y_train) - n_pos
+    pos_weight = n_neg / n_pos if n_pos > 0 else 1.0
+    print(f"Class distribution - Palindromes: {n_pos}, Non-palindromes: {n_neg}")
+    print(f"Positive weight: {pos_weight:.4f}")
+    
     # Create data loaders
     train_loader, val_loader = create_data_loaders(X_train, y_train, X_val, y_val, batch_size=32)
     
@@ -178,9 +213,9 @@ def train_model(dataset_size: int, epochs: int = 20) -> Dict:
     device = get_device()
     model = PalindromeRNN()
     
-    # Train
-    trainer = Trainer(model, device, learning_rate=0.001)
-    metrics = trainer.train(train_loader, val_loader, epochs=epochs, patience=5)
+    # Train with weighted loss and increased patience
+    trainer = Trainer(model, device, learning_rate=0.001, pos_weight=pos_weight)
+    metrics = trainer.train(train_loader, val_loader, epochs=epochs, patience=20)
     
     # Save model
     model_path = f'models/model_{dataset_size}.pt'

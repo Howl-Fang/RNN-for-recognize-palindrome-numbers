@@ -1,16 +1,16 @@
 {
   "dataset_size": 1000,
-  "final_train_loss": 0.316881982088089,
-  "final_val_loss": 0.4519376541887011,
-  "final_train_accuracy": 0.86875,
-  "final_val_accuracy": 0.76,
-  "epochs_trained": 26,
+  "final_train_loss": 0.20468983203172683,
+  "final_val_loss": 0.6396583914756775,
+  "final_train_accuracy": 0.9125,
+  "final_val_accuracy": 0.765,
+  "epochs_trained": 30,
   "hyperparameters": {
     "vocab_size": 10,
     "embedding_dim": 16,
-    "hidden_dim": 32,
+    "hidden_dim": 64,
     "output_dim": 1,
-    "n_layers": 2,
+    "n_layers": 3,
     "dropout": 0.3,
     "enableLSTM": true
   }
