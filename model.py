@@ -41,7 +41,7 @@ class PalindromeRNN(nn.Module):
     """Vanilla RNN with embedding layer for palindrome classification."""
     
     def __init__(self, vocab_size: int = 10, embedding_dim: int = 16, hidden_dim: int = 32, 
-                 output_dim: int = 1, n_layers: int = 2, dropout: float = 0.3):
+                 output_dim: int = 1, n_layers: int = 2, dropout: float = 0.3, LSTM: bool = True):
         """
         Args:
             vocab_size: Size of vocabulary (digits 0-9)
@@ -54,8 +54,12 @@ class PalindromeRNN(nn.Module):
         super().__init__()
         
         self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=0)
-        self.rnn = nn.RNN(embedding_dim, hidden_dim, num_layers=n_layers, 
-                         dropout=dropout if n_layers > 1 else 0, batch_first=True)
+        if LSTM:
+            self.rnn = nn.LSTM(embedding_dim, hidden_dim, num_layers=n_layers, 
+                              dropout=dropout if n_layers > 1 else 0, batch_first=True)
+        else:
+            self.rnn = nn.RNN(embedding_dim, hidden_dim, num_layers=n_layers, 
+                             dropout=dropout if n_layers > 1 else 0, batch_first=True)
         self.fc = nn.Linear(hidden_dim, output_dim)
         self.sigmoid = nn.Sigmoid()
     
