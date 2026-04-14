@@ -3,6 +3,7 @@ RNN model with embedding layer for palindrome number classification.
 Based on Tutorial 6 architecture.
 """
 
+from gc import enable
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
@@ -41,7 +42,7 @@ class PalindromeRNN(nn.Module):
     """Vanilla RNN with embedding layer for palindrome classification."""
     
     def __init__(self, vocab_size: int = 10, embedding_dim: int = 16, hidden_dim: int = 32, 
-                 output_dim: int = 1, n_layers: int = 2, dropout: float = 0.3, LSTM: bool = True):
+                 output_dim: int = 1, n_layers: int = 2, dropout: float = 0.3, enableLSTM: bool = True):
         """
         Args:
             vocab_size: Size of vocabulary (digits 0-9)
@@ -52,9 +53,10 @@ class PalindromeRNN(nn.Module):
             dropout: Dropout rate
         """
         super().__init__()
+        self.enableLSTM = enableLSTM
         
         self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=0)
-        if LSTM:
+        if self.enableLSTM:
             self.rnn = nn.LSTM(embedding_dim, hidden_dim, num_layers=n_layers, 
                               dropout=dropout if n_layers > 1 else 0, batch_first=True)
         else:
@@ -72,7 +74,10 @@ class PalindromeRNN(nn.Module):
             Predictions of shape [batch_size, 1]
         """
         embedded = self.embedding(text)  # [batch_size, seq_length, embedding_dim]
-        output, hidden = self.rnn(embedded)  # output: [batch_size, seq_length, hidden_dim]
+        if self.enableLSTM:
+            output, (hidden, cell) = self.rnn(embedded)  # output: [batch_size, seq_length, hidden_dim]
+        else:
+            output, hidden = self.rnn(embedded)  # output: [batch_size, seq_length, hidden_dim]
         hidden_last = hidden[-1]  # Take last layer's hidden state: [batch_size, hidden_dim]
         logits = self.fc(hidden_last)  # [batch_size, 1]
         predictions = self.sigmoid(logits)
