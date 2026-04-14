@@ -1,10 +1,10 @@
 {
   "dataset_size": 200,
-  "final_train_loss": 0.6905106186866761,
-  "final_val_loss": 0.7008580565452576,
+  "final_train_loss": 0.6904878497123719,
+  "final_val_loss": 0.7031730115413666,
   "final_train_accuracy": 0.525,
   "final_val_accuracy": 0.4,
-  "epochs_trained": 7,
+  "epochs_trained": 6,
   "hyperparameters": {
     "vocab_size": 10,
     "embedding_dim": 16,
