@@ -1,0 +1,18 @@
+{
+  "data_type": "12-digit-logscale",
+  "dataset_size": 200,
+  "model_type": "LSTM",
+  "final_train_loss": 0.6887400984764099,
+  "final_val_loss": 0.6985450387001038,
+  "final_train_accuracy": 0.55625,
+  "final_val_accuracy": 0.425,
+  "epochs_trained": 6,
+  "hyperparameters": {
+    "embedding_dim": 16,
+    "hidden_dim": 32,
+    "n_layers": 2,
+    "dropout": 0.3,
+    "learning_rate": 0.001,
+    "batch_size": 32
+  }
+}
