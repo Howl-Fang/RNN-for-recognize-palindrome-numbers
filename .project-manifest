@@ -1,0 +1,132 @@
+# HA5 Palindrome Detection - Project Manifest
+# Auto-generated project inventory
+
+## Project Metadata
+Name: Palindrome Sequence Classification (RNN & LSTM)
+Version: 2.0 (LSTM Extended)
+Status: Complete
+Last Updated: 2026-04-14
+
+## Branches
+master              f8f39c5  Vanilla RNN implementation (7-digit)
+lstm-models         31d90b6  LSTM + comprehensive evaluation (current)
+
+## Core Code Files (14 files)
+model.py             - RNN and LSTM architecture definitions
+train.py             - RNN training script
+train_lstm.py        - LSTM training for both domains
+generate_data.py     - Data generation with log-uniform support
+evaluate.py          - RNN evaluation on test.csv
+evaluate_on_logscale.py - 12-digit cross-domain evaluation
+evaluate_all_models.py  - Comprehensive 15-model framework
+
+## Documentation (8 files)
+README.md                 - Main guide (489 lines)
+DOCUMENTATION_INDEX.md    - Navigation guide (289 lines)
+FINAL_STATUS.md          - Project completion summary (161 lines)
+LSTM_COMPARISON.md       - RNN vs LSTM analysis (182 lines)
+LSTM_BRANCH_SUMMARY.md   - Branch overview (181 lines)
+LOSS_ANALYSIS.md         - Failure modes analysis (232 lines)
+LOGSCALE_EVALUATION.md   - 12-digit test analysis (72 lines)
+PROJECT_SUMMARY.txt      - Quick reference (139 lines)
+
+## Models (9 files)
+models/model_200.pt
+models/model_1000.pt
+models/model_50000.pt
+models/lstm/lstm_7digit_200.pt
+models/lstm/lstm_7digit_1000.pt
+models/lstm/lstm_7digit_50000.pt
+models/lstm/lstm_12digit_logscale_200.pt
+models/lstm/lstm_12digit_logscale_1000.pt
+models/lstm/lstm_12digit_logscale_50000.pt
+
+## Training Data (3 files)
+train_200.csv        - 7-digit (200 samples, balanced)
+train_1000.csv       - 7-digit (1000 samples, balanced)
+train_50000.csv      - 7-digit (34939 samples, natural distribution)
+
+## Test Data (2 files)
+test.csv             - 7-digit evaluation set
+test_sets/test_12digit_logscale.csv - 12-digit (1000 samples, log-uniform)
+
+## Results (3 files)
+results/evaluation_results.json
+results/evaluation_12digit_logscale.json
+results/comprehensive_evaluation.json
+
+## Training Artifacts
+Plots:
+- plots/loss_accuracy_200.png
+- plots/loss_accuracy_1000.png
+- plots/loss_accuracy_50000.png
+- plots/lstm/lstm_7digit_loss_accuracy_200.png
+- plots/lstm/lstm_7digit_loss_accuracy_1000.png
+- plots/lstm/lstm_7digit_loss_accuracy_50000.png
+- plots/lstm/lstm_12digit_loss_accuracy_200.png
+- plots/lstm/lstm_12digit_loss_accuracy_1000.png
+- plots/lstm/lstm_12digit_loss_accuracy_50000.png
+
+Logs:
+- logs/training_log_200.json
+- logs/training_log_1000.json
+- logs/training_log_50000.json
+- logs/lstm/lstm_7digit_training_log_200.json
+- logs/lstm/lstm_7digit_training_log_1000.json
+- logs/lstm/lstm_7digit_training_log_50000.json
+- logs/lstm/lstm_12digit_training_log_200.json
+- logs/lstm/lstm_12digit_training_log_1000.json
+- logs/lstm/lstm_12digit_training_log_50000.json
+
+## Configuration
+requirements.txt      - Dependencies (PyTorch, sklearn, etc.)
+.gitignore           - Git ignore patterns
+venv/                - Virtual environment
+
+## Statistics
+Total Commits: 7
+Branch Commits (lstm-models): 4
+Documentation Lines: 1256
+Code Lines: 1028+ (excluding models/data)
+Models Trained: 9 (6 LSTM + 3 RNN)
+Test Configurations: 15 (RNN + LSTM across domains)
+
+## Key Files by Purpose
+
+For Running:
+- README.md → "How to Run" section
+
+For Results:
+- LSTM_COMPARISON.md → Performance tables
+- results/comprehensive_evaluation.json → Raw metrics
+
+For Understanding Failures:
+- LOSS_ANALYSIS.md → 7 ranked contributors
+- DOCUMENTATION_INDEX.md → FAQ-style guide
+
+For Architecture:
+- model.py → Implementation
+- README.md → "Model Architectures" section
+
+For Recommendations:
+- FINAL_STATUS.md → Use cases
+- README.md → "Recommendations" section
+
+## Known Limitations
+- Cross-domain generalization poor for all models
+- Magnitude range overfitting fundamental issue
+- Distribution matching essential for accuracy
+
+## Future Improvements
+- Multi-domain training
+- Normalization techniques
+- Bidirectional LSTM
+- Ensemble methods
+- Data augmentation
+
+## Total Project Size
+Documentation: ~1.3K lines
+Code: 1000+ lines
+Models: 9 trained (100MB+)
+Data: ~10MB
+Total: ~120MB
