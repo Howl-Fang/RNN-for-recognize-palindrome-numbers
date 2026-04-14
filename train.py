@@ -236,7 +236,7 @@ def main():
     hyperparameters_path = 'logs/hyperparameters.json'
     with open(hyperparameters_path, 'w') as f:
         json.dump({
-            result[0]['model'].hyperparameters
+            results[0]['model'].hyperparameters
         }, f, indent=2)
     print(f"Saved hyperparameters to {hyperparameters_path}")
     
